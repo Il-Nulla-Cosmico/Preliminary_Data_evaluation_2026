@@ -149,3 +149,4 @@ for (col in names (dati)) {   # CILO FOR # # Esegue il codice per tutte le varia
 View(risultati)
 View(tabella)
 
+# FINE #
