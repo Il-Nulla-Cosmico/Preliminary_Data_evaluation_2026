@@ -37,7 +37,7 @@ It automatically generates a 2x2 graphical panel for each variable:
 * **Histogram with Normal Curve Overlay** (For assessing distribution shape)
 * **Boxplot** (For visualizing dispersion, median, and potential outliers)
 * **Q-Q Plot** (Quantile-Quantile plot for formally testing normality assumption)
-  [Diagnostic Plots] images.png
+  [Diagnostic Plots](images.png)
 ---
 
 ## Required R Packages
