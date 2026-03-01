@@ -1,47 +1,47 @@
-# ANALISI PRELIMINARE DEI DATI #
-# TABELLA #
+# PRELIMINARY DATA ANALYSIS #
+# SUMMARY TABLE INITIALIZATION #
 
 tabella <- data.frame(
-  variabile = character(),
-  media = numeric(),
-  mediana = numeric(),
+  variable = character(),
+  mean = numeric(),
+  median = numeric(),
   sd = numeric(),
-  varianza = numeric(),
+  variance = numeric(),
   CV = numeric(),
-  percent_fuori = numeric(),
-  livello = character(),
+  percent_out = numeric(),
+  level = character(),
   stringsAsFactors = FALSE
 )
 
 risultati <- list()
 
-for (col in names (dati)) {   # CILO FOR # # Esegue il codice per tutte le variabili inserite #
+for (col in names(dati)) {   # FOR LOOP # # Executes the code for all provided variables #
   
   x <- dati[[col]]
   
-  # === AGGIUNTA 1: PROTEZIONE ===
-  # Se la colonna non è numerica (es. Nomi Trattamenti), il ciclo salta al prossimo giro
+  # === ADDITION 1: PROTECTION ===
+  # If the column is not numeric (e.g., Treatment Names), the loop skips to the next iteration
   if(!is.numeric(x)) next 
   # ==============================
   
-  # Output a Video #
+  # Console Output #
   cat("\n=====================================\n")
-  cat("Analisi della variabile:", col, "\n")
+  cat("Analysis of variable:", col, "\n")
   cat("=====================================\n")
   
   str(x)
-  # print(head(x)) # Commentato per pulizia, decommenta se vuoi vederlo
+  # print(head(x)) # Commented for cleanliness, uncomment if you wish to see it
   
-  # Calcolo Statistiche Base (uso na.rm=TRUE per sicurezza)
+  # Basic Statistics Calculation (using na.rm=TRUE for safety)
   media <- mean(x, na.rm=TRUE)
   mediana <- median(x, na.rm=TRUE)
   varianza <- var(x, na.rm=TRUE)
   dev_std <- sd(x, na.rm=TRUE)
   range_val <- range(x, na.rm=TRUE)
   
-  cv <- (dev_std / media) * 100 # Coefficente di Variazione #
+  cv <- (dev_std / media) * 100 # Coefficient of Variation #
   
-  # Limiti per dispersione
+  # Dispersion Limits
   Upper_limit <- media + dev_std
   Lower_limit <- media - dev_std
   Upper_limit_2SD <- media + 2 * dev_std
@@ -51,102 +51,41 @@ for (col in names (dati)) {   # CILO FOR # # Esegue il codice per tutte le varia
   percent_fuori <- mean(fuori, na.rm=TRUE) * 100
   percent_dentro <- 100 - percent_fuori
   
-  # Classificazione #
-  if(cv <10){
-    livello <- "Livello 1 - Ottimo"
-  } else if(cv<30){
-    livello <- "Livello 2 - Buono"
-  } else if(cv <40){
-    livello <- "Livello 3 - Problematico"
-  } else{
-    livello <- "Livello 4 - Critico"
+  # Classification #
+  if(cv < 10){
+    livello <- "Level 1 - Optimal"
+  } else if(cv < 30){
+    livello <- "Level 2 - Good"
+  } else if(cv < 40){
+    livello <- "Level 3 - Problematic"
+  } else {
+    livello <- "Level 4 - Critical"
   }
   
-  if(percent_fuori > 10){ # Nota: Teoricamente nella normale è 5%, tu usi 10%
-    livello <- paste(livello,"|Nota: Molti valori fuori dal +- 2SD")
+  if(percent_fuori > 10){ # Note: Theoretically in a normal distribution it's 5%, you use 10%
+    livello <- paste(livello, "| Note: Many values outside +- 2SD")
   }
   
-  # === AGGIUNTA 2: RILEVATORE OUTLIER (P-Value) ===
-  # Qui calcoliamo chi è statisticamente "impossibile"
+  # === ADDITION 2: OUTLIER DETECTOR (P-Value) ===
+  # Calculating statistically "improbable" values
   
-  # 1. Calcolo Z-Score puntuale
+  # 1. Pointwise Z-Score calculation
   z_scores <- abs((x - media) / dev_std)
   
-  # 2. Calcolo P-Value (Probabilità)
+  # 2. P-Value calculation (Probability)
   p_values <- 2 * (1 - pnorm(z_scores))
   
-  # 3. Creiamo un mini-report temporaneo
+  # 3. Create a temporary mini-report
   df_check <- data.frame(
-    Riga = 1:length(x),
-    Valore = x,
+    Row = 1:length(x),
+    Value = x,
     Z = round(z_scores, 2),
     P_Value = p_values
   )
   
-  # 4. Filtriamo quelli con probabilità bassissima (es. < 0.01 ovvero 1%)
+  # 4. Filter values with very low probability (e.g., < 0.01 or 1%)
   outliers_detect <- df_check[df_check$P_Value < 0.01 & !is.na(df_check$P_Value), ]
   
-  # 5. Se ne trova, li stampa SUBITO a video per avvisarti
+  # 5. If found, print immediately to the console as a warning
   if(nrow(outliers_detect) > 0) {
-    cat("\n[!!!] ATTENZIONE: Trovati valori con P-Value < 0.01 (Molto anomali):\n")
-    # Formattiamo il numero p-value per non vedere "0e+00"
-    outliers_detect$P_Value <- format(outliers_detect$P_Value, scientific=FALSE, digits=4)
-    print(outliers_detect)
-    cat("\n")
-  }
-  # =================================================
-  
-  # Salvataggio Risultati #
-  risultati[[col]] <- list(
-    media = media,
-    mediana = mediana,
-    dev_std = dev_std,
-    CV = cv,
-    percent_fuori = percent_fuori,
-    livello = livello
-  )
-  
-  tabella <- rbind(tabella, data.frame(
-    variabile = col,
-    media = media,
-    mediana = mediana,
-    sd = dev_std,
-    varianza = varianza,
-    CV = cv,
-    percent_fuori = percent_fuori,
-    livello = livello,
-    stringsAsFactors = FALSE
-  ))
-  
-  # Grafici (Ho aggiunto par(mfrow) per vederli insieme, toglilo se non ti piace)
-  par(mfrow=c(2,2)) 
-  
-  hist(
-    x,
-    main = paste("Istogramma", col),
-    col.main ="Purple",
-    probability = TRUE,
-    breaks = 25,
-    xlab = "valori",
-    col.lab="darkred",
-    ylab = "Frequenza",
-    col = "#02F9F2",
-    border = "white"
-  )
-  curve(
-    dnorm(x, mean = media, sd = dev_std),
-    col = "Red",
-    lwd = 3,
-    add = TRUE
-  )
-  boxplot(x, main = paste("Boxplot", col), col="orange")
-  qqnorm(x, main=paste("QQ-Plot", col))
-  qqline(x, col = "Red", lwd = 3)
-  
-  par(mfrow=c(1,1)) # Reset griglia grafici
-}
-
-View(risultati)
-View(tabella)
-
-# FINE #
+    cat("\n[!!!] WARNING:
