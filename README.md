@@ -60,6 +60,7 @@ The script relies solely on R's base graphics and stats packages (`stats`, `grap
 2.  **Run the Script:** Copy and paste the provided R code into your RStudio console or script file and run it.
 3.  **Inspect Output:**
     * **Console:** Check for outlier flags ([!!!] ATTENZIONE) and general summaries.
+   ![Warning_Message](Warning_console.png)
     * **Viewer:** Two interactive tables (`tabella` and `risultati`) will open automatically for detailed inspection.
     * **Plots:** Diagnostic charts will appear in the plots pane.
 
