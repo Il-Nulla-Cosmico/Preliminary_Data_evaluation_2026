@@ -3,12 +3,9 @@
 ### 📊 Comprehensive Descriptive Statistics & Visualizations for Biological and Agronomic Data
 
 ## Overview
-This repository contains an R script designed to automate the process of **Exploratory Data Analysis (EDA)**. It is specifically tailored to handle multi-variable datasets common in agronomy, entomology (e.g., *Spodoptera littoralis* leaf damage studies), and biological research.
+This repository contains an R script designed to automate the process of **Exploratory Data Analysis (EDA)**. It is specifically tailored to handle multi-variable datasets common in agronomy, entomology, and biological research.
 
 The script iterates through a dataset, automatically identifying numerical variables, calculating key descriptive statistics, classifying data quality based on variability, and generating essential visualizations.
-
-### 👥 Collaboration and Origin
-This tool was developed as a specialized support component in collaboration with research partners for the computerization and standardization of bio-agronomic surveys.
 
 ---
 
@@ -68,7 +65,7 @@ The script relies solely on R's base graphics and stats packages (`stats`, `grap
 
 ## Contact & Credits
 This methodology was developed and computerized by:
-**[Your Name/Username]**
+**[Il nulla Cosmico]**
 
 ---
-*Date: March 1, 2026. This README was generated following technical consultancy on data digitalization.*
+*Date: October, 2025. This README was generated following technical consultancy on data digitalization.*
