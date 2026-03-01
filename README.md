@@ -37,7 +37,7 @@ It automatically generates a 2x2 graphical panel for each variable:
 * **Histogram with Normal Curve Overlay** (For assessing distribution shape)
 * **Boxplot** (For visualizing dispersion, median, and potential outliers)
 * **Q-Q Plot** (Quantile-Quantile plot for formally testing normality assumption)
-<img width="817" height="540" alt="3d6e516e-1380-468e-a3f8-8e1d7548e357" src="https://github.com/user-attachments/assets/f70e083f-a0d2-4bb4-b4de-2013c8ec52c7" />
+
 
 ---
 
